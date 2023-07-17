@@ -1,0 +1,33 @@
+FROM --platform=linux/amd64 ruby:2.7-alpine as base
+
+ENV SHELL /bin/bash
+
+# # Install ruby-debug-ide and debase
+# RUN gem install ruby-debug-ide debase solargraph
+RUN apk --update add --no-cache --virtual run-dependencies \
+    build-base musl-dev tzdata nodejs mysql-dev git shared-mime-info bash
+
+WORKDIR /usr/src/app
+
+COPY Gemfile Gemfile.lock ./
+
+RUN gem install -N rake bundler:2.0.0.pre.3 && \
+    bundle config set without development test &&\
+    bundle _2.0.0.pre.3_ lock --add-platform x86_64-linux && \
+    bundle package --all
+
+# move the cached gems to a temp location
+RUN mkdir -p /tmp/vendor && mv ./vendor/cache /tmp/vendor/
+
+# add source
+ADD . .
+
+# move the cached gems back to app dir and create a log dir
+RUN mv /tmp/vendor/cache /usr/src/app/vendor/cache && mkdir -p log
+
+#RUN bundle exec rake assets:precompile
+ENV RAILS_ENV=production
+
+EXPOSE 3000
+
+CMD ["rails", "server", "-b", "0.0.0.0"]

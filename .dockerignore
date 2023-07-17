@@ -1,0 +1,11 @@
+.git
+.gitignore
+.DS_Storegit
+.gitignore
+.DS_Store
+README.md
+/Dockerfile
+/env.*
+/log
+/tmp
+/public/assets

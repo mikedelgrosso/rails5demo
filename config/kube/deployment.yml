@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails5app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rails5app
+  template:
+    metadata:
+      labels:
+        app: rails5app
+    spec:
+      containers:
+      - name: rails5app
+        image: mikedelgrosso/rails5-demo
+        env:
+        - name: DATABASE_URL
+          value: mysql2://admin:mysql-pw@mysql-demo.cjkewvoeb2zp.us-west-1.rds.amazonaws.com/rails5demo_production?pool=5
+        - name: FOO
+          value: bar
+        # envFrom:
+        # - configMapRef:
+        #     name: k8s-local
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
