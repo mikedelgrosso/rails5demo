@@ -35,4 +35,4 @@ jobs:
           context: .
           file: Dockerfile.multi
           push: true
-          tags: mikedelgrosso/rails5demo:$(date +%s)
+          tags: mikedelgrosso/rails5demo:${{ date +%s }}
