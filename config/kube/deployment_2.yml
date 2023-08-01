@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails5app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rails5app
+  template:
+    metadata:
+      labels:
+        app: rails5app
+    spec:
+      containers:
+      - name: rails5app
+        image: mikedelgrosso/rails5-demo
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: rails5app-config
+                key: db_url
+          - name: RAILS_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: rails5app-config
+                key: rails_env
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000

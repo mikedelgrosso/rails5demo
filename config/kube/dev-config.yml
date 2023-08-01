@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rails5app-config
+data:
+  # property-like keys; each key maps to a simple value
+  db_url: mysql2://root:password@host.minikube.internal/rails5demo_development?pool=5
+  rails_env: development
+  
